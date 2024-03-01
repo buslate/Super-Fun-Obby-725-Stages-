@@ -1,5 +1,5 @@
 local library = loadstring(game:HttpGet("https://raw.githubusercontent.com/zxciaz/VenyxUI/main/Reuploaded"))() --someone reuploaded it so I put it in place of the original back up so guy can get free credit.
-local venyx = library.new("Test1", 5013109572)
+local venyx = library.new("Super Fun Obby 🌟 725 Stages", 5013109572)
     local page = venyx:addPage("LocalTest", 5012544693)
     local section1 = page:addSection("Page1")
     
