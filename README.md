@@ -1,7 +1,7 @@
 local library = loadstring(game:HttpGet("https://raw.githubusercontent.com/zxciaz/VenyxUI/main/Reuploaded"))() --someone reuploaded it so I put it in place of the original back up so guy can get free credit.
 local venyx = library.new("Super Fun Obby 🌟 725 Stages", 5013109572)
-    local page = venyx:addPage("LocalTest", 5012544693)
-    local section1 = page:addSection("Page1")
+    local page = venyx:addPage("Main", 5012544693)
+    local section1 = page:addSection("Farm")
     
     section1:addToggle("AutoFully", nil, function(a)
  _G.Auto = a
@@ -18,23 +18,57 @@ local venyx = library.new("Super Fun Obby 🌟 725 Stages", 5013109572)
         game:GetService("ReplicatedStorage"):WaitForChild("Honeypot"):WaitForChild("Internal"):WaitForChild("RemoteStorage"):WaitForChild("Rebirth - RemoteEvent"):FireServer()
  end
     end)
+    section1:addToggle("Anti AFK", nil, function(AFK)
+        _G.AFK = AFK
+        while _G.AFK do wait()
+        local vu = game:GetService("VirtualUser")
+        game:GetService("Players").LocalPlayer.Idled:connect(function()
+        vu:Button2Down(Vector2.new(0,0),workspace.CurrentCamera.CFrame)
+        wait(1)
+        vu:Button2Up(Vector2.new(0,0),workspace.CurrentCamera.CFrame)
+        end)
+    end
+    end)
     section1:addButton("infiniteyield", function()
         loadstring(game:HttpGet('https://raw.githubusercontent.com/EdgeIY/infiniteyield/master/source'))()
     end)
-    section1:addKeybind("Toggle Keybind", Enum.KeyCode.M, function()
-        print("Activated Keybind")
-        venyx:toggle()
-        end, function()
-        print("Changed Keybind")
-        end)
-    section1:addSlider("WalkSpeed", 16, -100, 400, function(value)
-        game.Players.LocalPlayer.Character.Humanoid.WalkSpeed = value
-        end)
-    section1:addSlider("JumpPower", 42, -100, 400, function(value)
-        game.Players.LocalPlayer.Character.Humanoid.JumpPower = value
-        end)
+    section1:addButton("Rejoin", function()
+        local ts = game:GetService("TeleportService")
 
+        local p = game:GetService("Players").LocalPlayer
+        
+         
+        
+        ts:Teleport(game.PlaceId, p)
+        end)
+    section1:addButton("Hop Server", function()
+    --[[
+	WARNING: Heads up! This script has not been verified by ScriptBlox. Use at your own risk!
+]]
+local Player = game.Players.LocalPlayer    
+local Http = game:GetService("HttpService")
+local TPS = game:GetService("TeleportService")
+local Api = "https://games.roblox.com/v1/games/"
 
+local _place,_id = game.PlaceId, game.JobId
+local _servers = Api.._place.."/servers/Public?sortOrder=Desc&limit=100"
+function ListServers(cursor)
+   local Raw = game:HttpGet(_servers .. ((cursor and "&cursor="..cursor) or ""))
+   return Http:JSONDecode(Raw)
+end
+
+local Next; repeat
+   local Servers = ListServers(Next)
+   for i,v in next, Servers.data do
+       if v.playing < v.maxPlayers and v.id ~= _id then
+           local s,r = pcall(TPS.TeleportToPlaceInstance,TPS,_place,v.id,Player)
+           if s then break end
+       end
+   end
+   
+   Next = Servers.nextPageCursor
+until not Next
+    end)
 --theme page
 local themes = {
     Background = Color3.fromRGB(129, 91, 91),
@@ -48,8 +82,24 @@ local themes = {
     local colors = theme:addSection("Colors")
     
     for theme, color in pairs(themes) do -- all in one theme changer, i know, im cool
-    colors:addColorPicker(theme, color, function(color3)
-    venyx:setTheme(theme, color3)
+    colors:addColorPicker(theme, color, function(color)
+    venyx:setTheme(theme, color)
     end)
     end 
+
+--setting
+local page = venyx:addPage("Setting", 5012544693)
+local section1 = page:addSection("Page1")
+section1:addKeybind("Toggle Keybind", Enum.KeyCode.M, function()
+    print("Activated Keybind")
+    venyx:toggle()
+    end, function()
+    print("Changed Keybind")
+    end)
+section1:addSlider("WalkSpeed", 16, -100, 400, function(value)
+    game.Players.LocalPlayer.Character.Humanoid.WalkSpeed = value
+    end)
+section1:addSlider("JumpPower", 42, -100, 400, function(value)
+    game.Players.LocalPlayer.Character.Humanoid.JumpPower = value
+    end)
     venyx:SelectPage(venyx.pages[1], true) -- no default for more freedom
